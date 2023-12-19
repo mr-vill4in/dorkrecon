@@ -26,7 +26,7 @@ header() {
     echo -e "${Cyan}Author: Amir Hamza @mr_vill4in"
     echo -e "${GREEN}Twitter: @mr_vill4in"
     echo -e "${Gcyan}Github: mr-vill4in"
-    echo -e "${Yellow}Version: 1.0"
+    echo -e "${Yellow}Version: 1.0 ${STOP}"
 }
 
 header
@@ -100,6 +100,7 @@ then
         echo "sorting and removing duplicates"
         cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork 
         nuclei -l sorted.$name.dork -s low,medium,high,critical -o nuclei.$name.out
+        echo -e "${PINK}Done! ${STOP}"
     done
 else
     echo -e "${PINK}your dork is $dork ${STOP}"
@@ -108,5 +109,5 @@ else
     echo "sorting and removing duplicates"
     cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
     nuclei -l sorted.$name.dork -s low,medium,high,critical -o nuclei.$name.out
-    
+    echo -e "${PINK}Done! ${STOP}"
 fi
