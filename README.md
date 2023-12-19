@@ -1,3 +1,3 @@
 # dorkrecon
 Automatic Recon from Google Dorking
-# Usage: ./dorkrecon.sh -f <dorkfile> -d <dork>
+## Usage: ./dorkrecon.sh -f dorkfile.txt or  -d dork query
