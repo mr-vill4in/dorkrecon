@@ -109,7 +109,7 @@ then
     echo -e "${PINK}$dorkfile found."
     cat $dorkfile | while read line ; do
         echo "dork is $line"
-        go-dork -q "$line" -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
+        go-dork -q $line -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
         subfinder -dL $name.dork -o sub.$name.dork 
         echo "sorting and removing duplicates"
         cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
@@ -119,7 +119,7 @@ then
     done
 else
     echo -e "${PINK}Your dork is $dork ${STOP}"
-    go-dork -q "$dork" -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
+    go-dork -q $dork -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
     subfinder -dL $name.dork -o sub.$name.dork
     echo "Sorting and removing duplicates"
     cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
