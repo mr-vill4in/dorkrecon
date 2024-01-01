@@ -65,20 +65,34 @@ if ! [ -x "$(command -v subfinder)" ]; then
         read answer
         if [ "$answer" == "y" ]
         then
-            go get -v github.com/projectdiscovery/subfinder/cmd/subfinder
+            go get -v github.com/projectdiscovery/subfinder/cmd/subfinder@latest
         else
             echo -e "${RED}Please install subfinder and run the script again"
             exit 1
         fi
   exit 1
 fi
+if ! [ -x "$(command -v naabu)" ] ; then
+  echo -e "${RED}Error: naabu is not installed." >&2
+    echo -e "${GREEN}Do you want to install naabu? [y/n]"
+        read answer
+        if [ "$answer" == "y" ]
+        then
+            go get -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+        else
+            echo -e "${RED}Please install naabu and run the script again"
+            exit 1
+        fi
+  exit 1
+fi
+
 if ! [ -x "$(command -v nuclei)" ]; then
   echo -e "${RED}Error: nuclei is not installed." >&2
     echo -e "${GREEN}Do you want to install nuclei? [y/n]"
         read answer
         if [ "$answer" == "y" ]
         then
-            go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei
+            go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
         else
             echo -e "${RED}Please install nuclei and run the script again"
             exit 1
@@ -98,16 +112,18 @@ then
         go-dork -q "$line" -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
         subfinder -dL $name.dork -o sub.$name.dork 
         echo "sorting and removing duplicates"
-        cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork 
-        nuclei -l sorted.$name.dork -s low,medium,high,critical -o nuclei.$name.out
+        cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
+        naabu -iL sorted.$name.dork -o naabu.$name.out -silent -rate 100  
+        nuclei -l naabu.$name.out -s low,medium,high,critical -o nuclei.$name.out
         echo -e "${PINK}Done! ${STOP}"
     done
 else
-    echo -e "${PINK}your dork is $dork ${STOP}"
+    echo -e "${PINK}Your dork is $dork ${STOP}"
     go-dork -q "$dork" -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
     subfinder -dL $name.dork -o sub.$name.dork
-    echo "sorting and removing duplicates"
+    echo "Sorting and removing duplicates"
     cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
-    nuclei -l sorted.$name.dork -s low,medium,high,critical -o nuclei.$name.out
+    naabu -iL sorted.$name.dork -o naabu.$name.out -silent -rate 100  
+    nuclei -l naabu.$name.out -s low,medium,high,critical -o nuclei.$name.out
     echo -e "${PINK}Done! ${STOP}"
 fi
