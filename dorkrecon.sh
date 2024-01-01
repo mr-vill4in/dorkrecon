@@ -78,7 +78,7 @@ if ! [ -x "$(command -v naabu)" ] ; then
         read answer
         if [ "$answer" == "y" ]
         then
-            go get -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+            go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
         else
             echo -e "${RED}Please install naabu and run the script again"
             exit 1
@@ -119,7 +119,7 @@ then
     done
 else
     echo -e "${PINK}Your dork is $dork ${STOP}"
-    go-dork -q $dork -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
+    go-dork -q "$dork" -p 5 -s | awk -F "/" '{print $3}' >> $name.dork
     subfinder -dL $name.dork -o sub.$name.dork
     echo "Sorting and removing duplicates"
     cat sub.$name.dork | sort -u >> sorted.$name.dork | tee -a sorted.$name.dork
